@@ -29,4 +29,6 @@ public:
 	void FindServer(FString ServerName);
 
 	IOnlineSessionPtr SessionInterface;
+
+	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
 };
