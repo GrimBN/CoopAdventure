@@ -16,6 +16,9 @@ void PrintString(const FString& StringToPrint)
 UMultiplayerSessionsSubsystem::UMultiplayerSessionsSubsystem()
 {
 	//PrintString("MSS Constructor");
+
+	CreateServerAfterDestroy = false;
+	DestroyedServerName = "";
 }
 
 void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -33,6 +36,7 @@ void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collect
 		if (SessionInterface.IsValid())
 		{
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UMultiplayerSessionsSubsystem::OnCreateSessionComplete);
+			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UMultiplayerSessionsSubsystem::OnDestroySessionComplete);
 		}
 	}
 }
@@ -54,6 +58,17 @@ void UMultiplayerSessionsSubsystem::CreateServer(FString ServerName)
 	}
 
 	FName SessionName = FName("Co-op Adventure Session Name");
+
+	FNamedOnlineSession *ExistingSession = SessionInterface->GetNamedSession(SessionName);
+
+	if (ExistingSession)
+	{
+		PrintString(FString::Printf(TEXT("Session with name %s already exists, destroying..."), *SessionName.ToString()));
+		CreateServerAfterDestroy = true;
+		DestroyedServerName = ServerName;
+		SessionInterface->DestroySession(SessionName);
+		return;
+	}
 
 	FOnlineSessionSettings SessionSettings;
 
@@ -88,5 +103,18 @@ void UMultiplayerSessionsSubsystem::OnCreateSessionComplete(FName SessionName, b
 	if (bWasSuccessful)
 	{
 		GetWorld()->ServerTravel("/Game/ThirdPerson/Maps/ThirdPersonMap?listen");
+	}
+}
+
+void UMultiplayerSessionsSubsystem::OnDestroySessionComplete(FName SessionName, bool bWasSuccessful)
+{
+	
+	PrintString(FString::Printf(TEXT("OnDestroySession: %s, Successful: %d"), *SessionName.ToString(), bWasSuccessful));
+	
+
+	if (CreateServerAfterDestroy)
+	{
+		CreateServerAfterDestroy = false;
+		CreateServer(DestroyedServerName);
 	}
 }

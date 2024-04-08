@@ -31,4 +31,8 @@ public:
 	IOnlineSessionPtr SessionInterface;
 
 	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
+	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
+
+	bool CreateServerAfterDestroy;
+	FString DestroyedServerName;
 };
