@@ -3,7 +3,7 @@
 
 #include "MultiplayerSessionsSubsystem.h"
 #include "OnlineSubsystem.h"
-#include "OnlineSessionSettings.h"
+#include "Online/OnlineSessionNames.h"
 
 void PrintString(const FString& StringToPrint)
 {
@@ -37,6 +37,7 @@ void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collect
 		{
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UMultiplayerSessionsSubsystem::OnCreateSessionComplete);
 			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UMultiplayerSessionsSubsystem::OnDestroySessionComplete);
+			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UMultiplayerSessionsSubsystem::OnFindSessionComplete);
 		}
 	}
 }
@@ -94,6 +95,26 @@ void UMultiplayerSessionsSubsystem::CreateServer(FString ServerName)
 void UMultiplayerSessionsSubsystem::FindServer(FString ServerName)
 {
 	PrintString("Find Server: " + ServerName);
+
+	if (ServerName.IsEmpty())
+	{
+		PrintString("Server name cannot be empty!");
+		return;
+	}
+
+	SessionSearch = MakeShareable(new FOnlineSessionSearch());
+
+	bool IsLan = false;
+
+	if (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL")
+	{
+		IsLan = true;
+	}
+
+	SessionSearch->bIsLanQuery = IsLan;
+	SessionSearch->MaxSearchResults = 9999;
+	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 }
 
 void UMultiplayerSessionsSubsystem::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful)
@@ -116,5 +137,23 @@ void UMultiplayerSessionsSubsystem::OnDestroySessionComplete(FName SessionName, 
 	{
 		CreateServerAfterDestroy = false;
 		CreateServer(DestroyedServerName);
+	}
+}
+
+void UMultiplayerSessionsSubsystem::OnFindSessionComplete(bool bWasSuccessful)
+{
+	if (!bWasSuccessful) return;
+
+	TArray<FOnlineSessionSearchResult> Results = SessionSearch->SearchResults;
+
+	if (Results.Num() > 0)
+	{
+		FString Msg = FString::Printf(TEXT("%d sessions found."), Results.Num());
+		PrintString(Msg);
+
+	}
+	else
+	{
+		PrintString("Zero Sessions found.");
 	}
 }
