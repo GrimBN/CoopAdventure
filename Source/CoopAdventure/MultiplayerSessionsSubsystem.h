@@ -37,6 +37,7 @@ public:
 
 	bool CreateServerAfterDestroy;
 	FString DestroyedServerName;
+	FString ServerNameToSearch;
 
 	TSharedPtr<FOnlineSessionSearch> SessionSearch; //Need to learn more about shared pointers
 };
