@@ -34,10 +34,12 @@ public:
 	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
 	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
 	void OnFindSessionComplete(bool bWasSuccessful);
+	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 
 	bool CreateServerAfterDestroy;
 	FString DestroyedServerName;
 	FString ServerNameToSearch;
+	FName MySessionName;
 
 	TSharedPtr<FOnlineSessionSearch> SessionSearch; //Need to learn more about shared pointers
 };
