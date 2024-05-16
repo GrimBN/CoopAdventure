@@ -8,6 +8,9 @@
 #include "OnlineSessionSettings.h"
 #include "MultiplayerSessionsSubsystem.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FServerCreateDelegate, bool, WasSuccessful);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FServerJoinedDelegate, bool, WasSuccessful);
+
 /**
  * 
  */
@@ -40,6 +43,12 @@ public:
 	FString DestroyedServerName;
 	FString ServerNameToSearch;
 	FName MySessionName;
+
+	UPROPERTY(BlueprintAssignable)
+	FServerCreateDelegate ServerCreateDel;
+
+	UPROPERTY(BlueprintAssignable)
+	FServerJoinedDelegate ServerJoinDel;
 
 	TSharedPtr<FOnlineSessionSearch> SessionSearch; //Need to learn more about shared pointers
 };
