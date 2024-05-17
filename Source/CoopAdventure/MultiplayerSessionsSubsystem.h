@@ -43,6 +43,9 @@ public:
 	FString DestroyedServerName;
 	FString ServerNameToSearch;
 	FName MySessionName;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString MapPath;
 
 	UPROPERTY(BlueprintAssignable)
 	FServerCreateDelegate ServerCreateDel;
