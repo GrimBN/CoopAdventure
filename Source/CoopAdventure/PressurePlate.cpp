@@ -77,6 +77,7 @@ void APressurePlate::OnPressurePlateBeginOverlap(UPrimitiveComponent* Overlappin
 	{
 		bActivated = true;
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::White, "Activated");
+		OnActivated.Broadcast();
 	}
 }
 
@@ -103,6 +104,7 @@ void APressurePlate::OnPressurePlateEndOverlap(UPrimitiveComponent* OverlappedCo
 	{
 		bActivated = false;
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::White, "Deactivated");
+		OnDeactivated.Broadcast();
 	}
 }
 
