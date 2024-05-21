@@ -35,4 +35,10 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bActivated;
+
+	UFUNCTION()
+	void OnPressurePlateBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OverlappingActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnPressurePlateEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OverlappingActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 };
