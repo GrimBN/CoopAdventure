@@ -44,5 +44,13 @@ public:
 	UPROPERTY(BlueprintReadWrite ,VisibleAnywhere)
 	bool AllTriggerActorsTriggered;
 
+	UFUNCTION()
+	void SetPoints(FVector Point1, FVector Point2);
+
+	UFUNCTION()
+	void OnPressurePlateActivated();
+
+	UFUNCTION()
+	void OnPressurePlateDeactivated();
 		
 };
