@@ -19,7 +19,6 @@ UTransporter::UTransporter()
 
 }
 
-
 // Called when the game starts
 void UTransporter::BeginPlay()
 {
@@ -37,11 +36,26 @@ void UTransporter::BeginPlay()
 	
 }
 
-
 // Called every frame
 void UTransporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	AActor* Owner = GetOwner();
+
+	if (Owner && Owner->HasAuthority() && bArePointsSet)
+	{
+		FVector CurrentLocation = Owner->GetActorLocation();
+		float Speed = FVector::Distance(StartPoint, EndPoint) / MoveTime;
+
+		FVector TargerLocation = AllTriggerActorsTriggered ? EndPoint : StartPoint;
+
+		if (!CurrentLocation.Equals(TargerLocation))
+		{
+			FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, TargerLocation, DeltaTime, Speed);
+			Owner->SetActorLocation(NewLocation);
+		}
+	}
 }
 
 void UTransporter::SetPoints(FVector Point1, FVector Point2)
