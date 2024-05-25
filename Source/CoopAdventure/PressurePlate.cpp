@@ -2,6 +2,7 @@
 
 
 #include "PressurePlate.h"
+#include "Transporter.h"
 
 // Sets default values
 APressurePlate::APressurePlate()
@@ -45,6 +46,9 @@ APressurePlate::APressurePlate()
 		Mesh->SetRelativeScale3D(FVector(4.0f, 4.0f, 0.5f));
 		Mesh->SetRelativeLocation(FVector(0.f, 0.f, 7.2f));
 	}*/
+
+	Transporter = CreateDefaultSubobject<UTransporter>(TEXT("Transporter"));
+	Transporter->OwnerIsTriggerActor = true;
 }
 
 // Called when the game starts or when spawned
@@ -60,6 +64,8 @@ void APressurePlate::BeginPlay()
 		TriggerMesh->OnComponentEndOverlap.AddDynamic(this, &APressurePlate::OnPressurePlateEndOverlap);
 	}
 	
+	FVector EndPoint = GetActorLocation() + FVector(0.f, 0.f, -10.f);
+	Transporter->SetPoints(GetActorLocation(), EndPoint);
 }
 
 // Called every frame

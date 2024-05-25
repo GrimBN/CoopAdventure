@@ -35,6 +35,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* Mesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UTransporter* Transporter;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bActivated;

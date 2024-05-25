@@ -24,6 +24,11 @@ void UTransporter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (OwnerIsTriggerActor)
+	{
+		TriggerActors.Add(GetOwner());
+	}
+
 	for (AActor* A : TriggerActors)
 	{
 		APressurePlate* Plate = Cast<APressurePlate>(A);
@@ -48,11 +53,11 @@ void UTransporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 		FVector CurrentLocation = Owner->GetActorLocation();
 		float Speed = FVector::Distance(StartPoint, EndPoint) / MoveTime;
 
-		FVector TargerLocation = AllTriggerActorsTriggered ? EndPoint : StartPoint;
+		FVector TargetLocation = AllTriggerActorsTriggered ? EndPoint : StartPoint;
 
-		if (!CurrentLocation.Equals(TargerLocation))
+		if (!CurrentLocation.Equals(TargetLocation))
 		{
-			FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, TargerLocation, DeltaTime, Speed);
+			FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, TargetLocation, DeltaTime, Speed);
 			Owner->SetActorLocation(NewLocation);
 		}
 	}

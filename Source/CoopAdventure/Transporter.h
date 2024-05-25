@@ -44,6 +44,9 @@ public:
 	UPROPERTY(BlueprintReadWrite ,VisibleAnywhere)
 	bool AllTriggerActorsTriggered;
 
+	UPROPERTY(EditAnywhere)
+	bool OwnerIsTriggerActor;
+
 	UFUNCTION(BlueprintCallable)
 	void SetPoints(FVector Point1, FVector Point2);
 
