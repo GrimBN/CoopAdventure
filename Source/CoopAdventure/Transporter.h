@@ -51,9 +51,9 @@ public:
 	void SetPoints(FVector Point1, FVector Point2);
 
 	UFUNCTION()
-	void OnPressurePlateActivated();
+	void OnTriggerActorActivated();
 
 	UFUNCTION()
-	void OnPressurePlateDeactivated();
+	void OnTriggerActorDeactivated();
 		
 };

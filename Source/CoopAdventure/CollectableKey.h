@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "CollectableKey.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCollectableKeyOnCollected);
+
 UCLASS()
 class COOPADVENTURE_API ACollectableKey : public AActor
 {
@@ -34,6 +36,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* Mesh;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UAudioComponent* CollectAudio;
+
 	UPROPERTY(ReplicatedUsing = OnRep_IsCollected, VisibleAnywhere, BlueprintReadWrite)
 	bool bIsCollected;
 
@@ -46,8 +51,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float RotationSpeed;
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	UAudioComponent* CollectAudio;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class ACollectableKeyHolder* KeyHolderRef;
 
-
+	UPROPERTY(BlueprintAssignable)
+	FCollectableKeyOnCollected OnCollected;
 };

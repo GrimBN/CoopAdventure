@@ -2,8 +2,8 @@
 
 #include "Transporter.h"
 #include "PressurePlate.h"
+#include "CollectableKey.h"
 
-// Sets default values for this component's properties
 UTransporter::UTransporter()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -19,7 +19,6 @@ UTransporter::UTransporter()
 
 }
 
-// Called when the game starts
 void UTransporter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -29,13 +28,27 @@ void UTransporter::BeginPlay()
 		TriggerActors.Add(GetOwner());
 	}
 
+	//TriggerActors here are different to the ones for the pressure plate, its just a general term to refer to Actors that can/will trigger the respective component/custom actor class
 	for (AActor* A : TriggerActors)
 	{
 		APressurePlate* Plate = Cast<APressurePlate>(A);
-		if (Plate)
+		AActor* Owner = GetOwner();
+
+		//Added a HasAuthority check because I thought I missed it but I didn't and nothing seems to have changed so leaving it as is
+		//Update: The reason nothing changed is because the pressure plates only check for overlap, and as a result broadcast on overlap, on the server and not on the client
+		//So even though the client transporter had also subscribed to the delegates they never receive the broadcast from the client pressure plate because they never make one
+		if (Owner && Owner->HasAuthority() && Plate)
 		{
-			Plate->OnActivated.AddDynamic(this, &UTransporter::OnPressurePlateActivated);
-			Plate->OnDeactivated.AddDynamic(this, &UTransporter::OnPressurePlateDeactivated);
+			Plate->OnActivated.AddDynamic(this, &UTransporter::OnTriggerActorActivated);
+			Plate->OnDeactivated.AddDynamic(this, &UTransporter::OnTriggerActorDeactivated);
+			continue;
+		}
+
+		ACollectableKey* Key = Cast<ACollectableKey>(A);
+
+		if (Owner && Owner->HasAuthority() && Key)
+		{
+			Key->OnCollected.AddDynamic(this, &UTransporter::OnTriggerActorActivated);
 		}
 	}
 	
@@ -73,24 +86,19 @@ void UTransporter::SetPoints(FVector Point1, FVector Point2)
 	bArePointsSet = true;
 }
 
-void UTransporter::OnPressurePlateActivated()
+void UTransporter::OnTriggerActorActivated()
 {
 	ActivatedTriggerCount++;
-	FString Msg = FString::Printf(TEXT("Transport Trigger Count: %d"), ActivatedTriggerCount);
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::White, Msg);
 
 	if (ActivatedTriggerCount >= TriggerActors.Num() && !AllTriggerActorsTriggered)
 	{
 		AllTriggerActorsTriggered = true;
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::White, "AllTriggerActorsTriggered!");
 	}
 }
 
-void UTransporter::OnPressurePlateDeactivated()
+void UTransporter::OnTriggerActorDeactivated()
 {
 	ActivatedTriggerCount--;
-	FString Msg = FString::Printf(TEXT("Transport Trigger Count: %d"), ActivatedTriggerCount);
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::White, Msg);
 
 	if (ActivatedTriggerCount < TriggerActors.Num() && AllTriggerActorsTriggered)
 	{
