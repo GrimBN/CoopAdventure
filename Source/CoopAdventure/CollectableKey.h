@@ -40,4 +40,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnRep_IsCollected();
 
+	UFUNCTION()
+	void OnKeyBeginOverlap(UPrimitiveComponent* OverlappingComponent, AActor* OverlappingActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float RotationSpeed;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UAudioComponent* CollectAudio;
+
+
 };
