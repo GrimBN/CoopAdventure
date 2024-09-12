@@ -2,6 +2,7 @@
 #include "MovableActor.h"
 #include "Components/ArrowComponent.h"
 #include "Transporter.h"
+#include "ObjectRotator.h"
 
 AMovableActor::AMovableActor()
 {
@@ -38,6 +39,16 @@ void AMovableActor::BeginPlay()
 	FVector EndPoint = GetActorLocation() + Point2->GetRelativeLocation();
 
 	Transporter->SetPoints(StartPoint, EndPoint);
+
+	if (ObjectRotator)
+	{
+		FRotator StartRotation = GetActorRotation() + Point1->GetRelativeRotation();
+		
+		FRotator EndRotation = GetActorRotation() + Point2->GetRelativeRotation();
+
+
+		ObjectRotator->SetRotationPoints(StartRotation, EndRotation);
+	}
 	
 }
 

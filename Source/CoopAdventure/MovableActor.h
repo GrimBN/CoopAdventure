@@ -35,4 +35,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	class UTransporter* Transporter;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class UObjectRotator* ObjectRotator;
 };
