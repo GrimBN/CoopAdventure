@@ -39,9 +39,12 @@ void AMovableActor::BeginPlay()
 	FVector EndPoint = GetActorLocation() + Point2->GetRelativeLocation();
 
 	Transporter->SetPoints(StartPoint, EndPoint);
-
+	
+	//UE_LOG(LogTemp, Display, TEXT("Movable Actor has Object Rotator?: %d"), ObjectRotator == nullptr);
+	ObjectRotator = GetComponentByClass<UObjectRotator>();
 	if (ObjectRotator)
 	{
+		
 		FRotator StartRotation = GetActorRotation() + Point1->GetRelativeRotation();
 		
 		FRotator EndRotation = GetActorRotation() + Point2->GetRelativeRotation();

@@ -7,7 +7,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class COOPADVENTURE_API UObjectRotator : public UTransporter
 {
 	GENERATED_BODY()
@@ -17,6 +17,10 @@ public:
 	UObjectRotator();
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
 
 private:
 	FRotator StartRotation;

@@ -6,10 +6,19 @@
 //TODO: Find out if this component can be added dynamically to specific movable actors
 UObjectRotator::UObjectRotator()
 {
+	PrimaryComponentTick.bCanEverTick = true;
+
+	SetIsReplicatedByDefault(true);
+
 	bAreRotationPointsSet = false;
 
 	StartRotation = FRotator::ZeroRotator;
 	EndRotation = FRotator::ZeroRotator;
+}
+
+void UObjectRotator::BeginPlay()
+{
+	Super::BeginPlay();
 }
 
 void UObjectRotator::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -22,6 +31,7 @@ void UObjectRotator::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	{
 		FRotator CurrentRotation = Owner->GetActorRotation();
 		float angularVeloctiy = EndRotation.GetManhattanDistance(StartRotation) / MoveTime;
+		//UE_LOG(LogTemp, Warning, TEXT("%f"), angularVeloctiy);
 
 		FRotator TargetRotation = AllTriggerActorsTriggered ? EndRotation : StartRotation;
 
@@ -32,6 +42,7 @@ void UObjectRotator::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		}
 	}
 }
+
 
 void UObjectRotator::SetRotationPoints(FRotator Point1, FRotator Point2)
 {
