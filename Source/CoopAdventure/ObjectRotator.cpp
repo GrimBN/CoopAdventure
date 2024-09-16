@@ -29,15 +29,15 @@ void UObjectRotator::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 	if (Owner && Owner->HasAuthority() && bAreRotationPointsSet)
 	{
-		FRotator CurrentRotation = Owner->GetActorRotation();
-		float angularVeloctiy = EndRotation.GetManhattanDistance(StartRotation) / MoveTime;
+		FQuat CurrentRotation = Owner->GetActorRotation().Quaternion();
+		float angularVeloctiy = EndRotation.Quaternion().AngularDistance(StartRotation.Quaternion()) / MoveTime;
 		//UE_LOG(LogTemp, Warning, TEXT("%f"), angularVeloctiy);
 
-		FRotator TargetRotation = AllTriggerActorsTriggered ? EndRotation : StartRotation;
+		FQuat TargetRotation = AllTriggerActorsTriggered ? EndRotation.Quaternion() : StartRotation.Quaternion();
 
 		if (!CurrentRotation.Equals(TargetRotation))
 		{
-			FRotator NewRotation = FMath::RInterpConstantTo(CurrentRotation, TargetRotation, DeltaTime, angularVeloctiy);
+			FQuat NewRotation = FMath::QInterpConstantTo(CurrentRotation, TargetRotation, DeltaTime, angularVeloctiy);
 			Owner->SetActorRotation(NewRotation);
 		}
 	}
