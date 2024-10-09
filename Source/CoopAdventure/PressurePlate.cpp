@@ -64,7 +64,7 @@ void APressurePlate::BeginPlay()
 		TriggerMesh->OnComponentEndOverlap.AddDynamic(this, &APressurePlate::OnPressurePlateEndOverlap);
 	}
 	
-	FVector EndPoint = GetActorLocation() + FVector(0.f, 0.f, -10.f);
+	FVector EndPoint = GetActorLocation() + GetActorUpVector() * -10.f;//FVector(0.f, 0.f, -10.f);
 	Transporter->SetPoints(GetActorLocation(), EndPoint);
 }
 
