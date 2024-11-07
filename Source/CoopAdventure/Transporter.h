@@ -32,6 +32,9 @@ protected:
 	bool bArePointsSet;
 
 	UPROPERTY(EditAnywhere)
+	bool bMovementAllowed;
+
+	UPROPERTY(EditAnywhere)
 	float MoveTime;
 
 	UPROPERTY(EditAnywhere)

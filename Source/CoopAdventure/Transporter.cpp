@@ -13,6 +13,7 @@ UTransporter::UTransporter()
 	MoveTime = 3.0f;
 	ActivatedTriggerCount = 0;
 	bArePointsSet = false;
+	bMovementAllowed = true;
 
 	StartPoint = FVector::Zero();
 	EndPoint = FVector::Zero();
@@ -61,7 +62,7 @@ void UTransporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 
 	AActor* Owner = GetOwner();
 
-	if (Owner && Owner->HasAuthority() && bArePointsSet)
+	if (Owner && Owner->HasAuthority() && bArePointsSet && bMovementAllowed)
 	{
 		FVector CurrentLocation = Owner->GetActorLocation();
 		float Speed = FVector::Distance(StartPoint, EndPoint) / MoveTime;
