@@ -37,7 +37,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float MoveTime;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<AActor*> TriggerActors;
 
 	UPROPERTY(VisibleAnywhere)
