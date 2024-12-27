@@ -74,11 +74,11 @@ void ACollectableKey::OnRep_IsCollected()
 {
 	if (HasAuthority())
 	{
-		UE_LOG(LogTemp, Display, TEXT("OnRep_IsCollected called from the server"));
+		//UE_LOG(LogTemp, Display, TEXT("OnRep_IsCollected called from the server"));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Display, TEXT("OnRep_IsCollected called from the client"));
+		//UE_LOG(LogTemp, Display, TEXT("OnRep_IsCollected called from the client"));
 	}
 
 	Mesh->SetVisibility(!bIsCollected);
@@ -97,7 +97,7 @@ void ACollectableKey::OnRep_IsCollected()
 
 void ACollectableKey::OnKeyBeginOverlap(UPrimitiveComponent* OverlappingComponent, AActor* OverlappingActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *OverlappingActor->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OverlappingActor->GetName());
 
 	if (Cast<ACoopAdventureCharacter>(OverlappingActor) && !bIsCollected)
 	{

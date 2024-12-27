@@ -33,7 +33,7 @@ void AWinArea::Tick(float DeltaTime)
 		bWinCondition = OverlappingActors.Num() == 2;
 		if (bWinCondition)
 		{
-			UE_LOG(LogTemp, Display, TEXT("Win!"));
+			//UE_LOG(LogTemp, Display, TEXT("Win!"));
 
 			MulticastRPCWin();
 		}
